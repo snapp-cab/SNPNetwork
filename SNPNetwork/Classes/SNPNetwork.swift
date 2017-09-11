@@ -39,9 +39,9 @@ public class SNPNetwork {
     var authorized = false {
         didSet {
             if authorized {
-                for request in queue {
+//                for request in queue {
 //                    request.res
-                }
+//                }
             }
         }
     }
