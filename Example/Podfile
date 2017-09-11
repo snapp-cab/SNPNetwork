@@ -1,6 +1,8 @@
 use_frameworks!
+inhibit_all_warnings!
+
+platform :ios, '8.0'
+
 target 'SNPNetwork_Tests' do
-  pod 'SNPNetwork', :path => '../'
-  
-  
+    pod 'SNPNetwork', :path => '../'
 end

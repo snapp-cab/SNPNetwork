@@ -1,0 +1,27 @@
+{
+  "name": "SNPNetwork",
+  "version": "0.1.0",
+  "summary": "A short description of SNPNetwork.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/behdad-keynejad/SNPNetwork",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "behdad-keynejad": "behdad.keynejad@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/behdad-keynejad/SNPNetwork.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "SNPNetwork/Classes/**/*",
+  "dependencies": {
+    "Alamofire": [
+      "~> 4.0"
+    ]
+  }
+}
