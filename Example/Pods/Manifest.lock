@@ -2,6 +2,8 @@ PODS:
   - Alamofire (4.5.0)
   - SNPNetwork (0.1.0):
     - Alamofire (~> 4.0)
+    - SwiftLint
+  - SwiftLint (0.20.0)
 
 DEPENDENCIES:
   - SNPNetwork (from `../`)
@@ -12,7 +14,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  SNPNetwork: 399e01b1cbe36602d5df29c86fe7085b54045e37
+  SNPNetwork: 885e4ad8f0cc3de100e23a3872870acceef6b746
+  SwiftLint: 3f7543509c931d1291395335f34e245d3919b7f2
 
 PODFILE CHECKSUM: 85b3df8859d80ecdc4a8c7119e599a65ace81fe6
 

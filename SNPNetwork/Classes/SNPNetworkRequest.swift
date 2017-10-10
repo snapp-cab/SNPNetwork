@@ -15,15 +15,17 @@ public class SNPNetworkRequest{
     public let request: URLRequest?
     public var error: Error?
     private let alamofireRequest: DataRequest?
+    public static var config:SNPNetworkConfig?
     
     
     public func responseJSON(
         options: JSONSerialization.ReadingOptions = .allowFragments,
-        completionHandler: @escaping (SNPDataResponse) -> Void)
+        completionHandler: @escaping (SNPDataResponse<Any>) -> Void)
         -> Self
     {
         alamofireRequest!.responseJSON { response in
-            let SNPResponse = SNPDataResponse(request: response.request, response: response.response, data: response.data);
+            let result:SNPNetworkResult = SNPNetworkResult(alamofireEnum: response.result)
+            let SNPResponse = SNPDataResponse(request: response.request, response: response.response, data: response.data , result: result );
             completionHandler(SNPResponse)
         }
         return self;

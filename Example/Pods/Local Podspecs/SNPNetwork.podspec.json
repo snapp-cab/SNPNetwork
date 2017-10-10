@@ -1,7 +1,7 @@
 {
   "name": "SNPNetwork",
   "version": "0.1.0",
-  "summary": "A short description of SNPNetwork.",
+  "summary": "Snapp networking module.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/behdad-keynejad/SNPNetwork",
   "license": {
@@ -22,6 +22,9 @@
   "dependencies": {
     "Alamofire": [
       "~> 4.0"
+    ],
+    "SwiftLint": [
+
     ]
   }
 }
