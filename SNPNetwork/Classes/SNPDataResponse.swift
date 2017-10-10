@@ -74,8 +74,6 @@ public struct SNPDataResponse<value>{
 
     public let result:SNPNetworkResult<value>
 
-
-    var _metrics: AnyObject?
     
     /// - parameter request:  The URL request sent to the server.
     /// - parameter response: The server's response to the URL request.
@@ -94,6 +92,35 @@ public struct SNPDataResponse<value>{
         self.response = response
         self.data = data
         self.result = result
+    }
+}
+
+public struct SNPDefaultDataResponse{
+    /// The URL request sent to the server.
+    public let request: URLRequest?
+    
+    /// The server's response to the URL request.
+    public let response: HTTPURLResponse?
+    
+    /// The data returned by the server.
+    public let data: Data?
+    
+    
+    /// - parameter request:  The URL request sent to the server.
+    /// - parameter response: The server's response to the URL request.
+    /// - parameter data:     The data returned by the server.
+    /// - parameter result:   The result of response serialization.
+    /// - parameter timeline: The timeline of the complete lifecycle of the `Request`. Defaults to `Timeline()`.
+    ///
+    /// - returns: The new `DataResponse` instance.
+    public init(
+        request: URLRequest?,
+        response: HTTPURLResponse?,
+        data: Data?)
+    {
+        self.request = request
+        self.response = response
+        self.data = data
     }
 }
 
