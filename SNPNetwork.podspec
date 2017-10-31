@@ -24,11 +24,11 @@ TODO: Add long description of the pod here.
   s.homepage         = 'https://github.com/behdad-keynejad/SNPNetwork'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'behdad-keynejad' => 'behdad.keynejad@gmail.com' }
-  s.source           = { :git => 'https://github.com/behdad-keynejad/SNPNetwork.git', :tag => s.version.to_s }
+  s.author           = { 'Nader Rashed' => 'ndrrashed@gmail.com' }
+  s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/behdad_k'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
 
   s.source_files = 'SNPNetwork/Classes/**/*'
   
@@ -40,5 +40,6 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'SwiftLint'
+
   
 end

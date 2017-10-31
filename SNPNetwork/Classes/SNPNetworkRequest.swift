@@ -17,6 +17,7 @@
                 private let alamofireRequest: DataRequest?
                 public static var config:SNPNetworkConfig?
                 
+                @discardableResult
                 public func response (completionHandler: @escaping (SNPDefaultDataResponse) -> Void) -> Self{
                     alamofireRequest!.response { response in
                         let snpresponse = SNPDefaultDataResponse(request: response.request, response: response.response, data: response.data)
@@ -25,6 +26,7 @@
                     return self
                 }
                 
+                @discardableResult
                 public func responseJSON(
                     options: JSONSerialization.ReadingOptions = .allowFragments,
                     completionHandler: @escaping (SNPDataResponse<Any>) -> Void)
@@ -40,6 +42,7 @@
                     return self;
                 }
                 
+                @discardableResult
                 public func responseString(
                     options: JSONSerialization.ReadingOptions = .allowFragments,
                     completionHandler: @escaping (SNPDataResponse<String>) -> Void)
@@ -55,6 +58,9 @@
                     return self;
                 }
                 
+                
+                
+                @discardableResult
                 public func responseData(
                     options: JSONSerialization.ReadingOptions = .allowFragments,
                     completionHandler: @escaping (SNPDataResponse<Data>) -> Void)
@@ -68,6 +74,12 @@
                     }
                     
                     return self;
+                }
+                
+                @discardableResult
+                public func validate() -> Self{
+                    self.alamofireRequest?.validate()
+                    return self
                 }
                 
                 

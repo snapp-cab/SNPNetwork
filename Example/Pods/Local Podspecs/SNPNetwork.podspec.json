@@ -25,6 +25,9 @@
     ],
     "SwiftLint": [
 
+    ],
+    "AlamofireObjectMapper": [
+      "~> 4.0"
     ]
   }
 }

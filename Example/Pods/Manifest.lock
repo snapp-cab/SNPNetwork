@@ -1,7 +1,12 @@
 PODS:
   - Alamofire (4.5.0)
+  - AlamofireObjectMapper (4.1.0):
+    - Alamofire (~> 4.1)
+    - ObjectMapper (~> 2.0)
+  - ObjectMapper (2.2.7)
   - SNPNetwork (0.1.0):
     - Alamofire (~> 4.0)
+    - AlamofireObjectMapper (~> 4.0)
     - SwiftLint
   - SwiftLint (0.20.0)
 
@@ -14,7 +19,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  SNPNetwork: 885e4ad8f0cc3de100e23a3872870acceef6b746
+  AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
+  ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
+  SNPNetwork: 347530ee0eed7364b3092784f1f137bbb1463342
   SwiftLint: 3f7543509c931d1291395335f34e245d3919b7f2
 
 PODFILE CHECKSUM: 85b3df8859d80ecdc4a8c7119e599a65ace81fe6
