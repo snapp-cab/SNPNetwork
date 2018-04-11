@@ -1,6 +1,0 @@
-framework module SNPNetwork {
-  umbrella header "SNPNetwork-umbrella.h"
-
-  export *
-  module * { export * }
-}
