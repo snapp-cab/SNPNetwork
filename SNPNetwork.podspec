@@ -1,45 +1,21 @@
-#
-# Be sure to run `pod lib lint SNPNetwork.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
-  s.name             = 'SNPNetwork'
-  s.version          = '0.1.0'
-  s.summary          = 'Snapp networking module.'
+s.name             = 'SNPNetwork'
+s.version          = '0.1.0'
+s.summary          = 'SNPNetwork is a Swift-based HTTP networking library for iOS.'
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+s.description      = <<-DESC
+SNPNetwork is a Swift-based HTTP networking library for iOS. It provides an interface on top of Alamofire
+that simplifies a number of common networking tasks. We've created it to add some features we needed in Snapp
+application which is not supported directly in Alamofire. Another key feature is a super-simplified JSON parsing
+facility that gives you clearer syntax by set it's 'responseKey' parameter.
+DESC
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+s.homepage         = 'https://github.com/snapp-cab/SNPNetwork'
+s.license          = { :type => 'MIT', :file => 'LICENSE' }
+s.author           = { 'arashzjahangiri@gmail.com' => 'arashzjahangiri@gmail.com' }
+s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
 
-  s.homepage         = 'https://github.com/behdad-keynejad/SNPNetwork'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Nader Rashed' => 'ndrrashed@gmail.com' }
-  s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/behdad_k'
-
-  s.ios.deployment_target = '9.0'
-
-  s.source_files = 'SNPNetwork/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'SNPNetwork' => ['SNPNetwork/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Alamofire', '~> 4.0'
-  s.dependency 'SwiftLint'
-
-  
+s.ios.deployment_target = '9.0'
+s.source_files = 'SNPNetwork/Classes'
+s.dependency 'Alamofire', '~> 4.0'
 end
