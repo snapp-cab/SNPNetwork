@@ -1,29 +1,126 @@
-import UIKit
+//
+//  SNPNetworkTests.swift
+//  SnappTests
+//
+//  Created by Arash Z.Jahangiri on 4/3/18.
+//  Copyright © 2018 Snapp. All rights reserved.
+//
+
 import XCTest
-import SNPNetwork
+@testable import SNPNetwork
+import Alamofire
 
 class Tests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var expectedString: String!
+    let mockURL = "http://mockurl"
+    
+    struct MockModel: Codable {
+        let mockData: String?
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testDownloadWasSuccessful() {
+        
+        class MockSNPNetwork: SNPNetwork {
+            static var wasDownloadSuccessful = false
+            override class func download(_ url: String,
+                                         progress:((_ progress: Double) -> Void)?,
+                                         completion: @escaping (_ status: String?) -> Void) {
+                wasDownloadSuccessful = true
+                completion("Downloading file was successful and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)")
+            }
+        }
+        
+        MockSNPNetwork.download(mockURL, progress: nil, completion: { (status) in
+            self.expectedString = status!
+        })
+        
+        XCTAssertTrue(MockSNPNetwork.wasDownloadSuccessful)
+        XCTAssertEqual( expectedString, "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.wasDownloadSuccessful)")
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testDownloadWasFailed() {
+        
+        class MockSNPNetwork: SNPNetwork {
+            static var wasDownloadSuccessful = true
+            override class func download(_ url: String,
+                                         progress: ((_ progress: Double) -> Void)?,
+                                         completion: @escaping (_ status: String?) -> Void) {
+                wasDownloadSuccessful = false
+                completion("Downloading file was failed and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)")
+            }
+        }
+        
+        MockSNPNetwork.download(mockURL, progress: nil, completion: { (status) in
+            self.expectedString = status!
+        })
+        
+        XCTAssertFalse(MockSNPNetwork.wasDownloadSuccessful)
+        XCTAssertEqual(expectedString, "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.wasDownloadSuccessful)")
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure() {
-            // Put the code you want to measure the time of here.
+    func testRequestReturnsData() {
+        
+        class MockSNPNetwork: SNPNetwork {
+            static let fakeResult = MockModel(mockData: "mockData")
+            override class func request<T: Decodable, E: SNPError>(url: URLConvertible,
+                                                                   method: HTTPMethod = .get,
+                                                                   parameters: Parameters? = nil,
+                                                                   encoding: ParameterEncoding = URLEncoding.default,
+                                                                   headers: HTTPHeaders? = nil,
+                                                                   responseKey: String? = nil,
+                                                                   completion: @escaping (T?, E?) -> Void) {
+                completion(fakeResult as? T, nil)
+            }
+        }
+        
+        MockSNPNetwork.request(url: mockURL,
+                               method: .get,
+                               parameters: nil,
+                               encoding: URLEncoding.default,
+                               headers: nil,
+                               responseKey: "") { (model: MockModel?, error: SNPError?) in
+                                guard let aModel = model else {
+                                    XCTFail("Model should not be nil")
+                                    print(error!)
+                                    return
+                                }
+                                XCTAssertNotNil(aModel)
+                                self.expectedString = "mockData"
+                                XCTAssertEqual(self.expectedString, aModel.mockData!)
         }
     }
     
+    func testRequestReturnsNil() {
+        
+        class MockSNPNetwork: SNPNetwork {
+            static let fakeError = SNPError(domain: "FakeDomain", code: 987, message: "this is fake message")
+            override class func request<T: Decodable, E: SNPError>(url: URLConvertible,
+                                                                   method: HTTPMethod = .get,
+                                                                   parameters: Parameters? = nil,
+                                                                   encoding: ParameterEncoding = URLEncoding.default,
+                                                                   headers: HTTPHeaders? = nil,
+                                                                   responseKey: String? = nil,
+                                                                   completion: @escaping (T?, E?) -> Void) {
+                completion(nil, fakeError as? E)
+            }
+        }
+        
+        MockSNPNetwork.request(url: mockURL,
+                               method: .get,
+                               parameters: nil,
+                               encoding: URLEncoding.default,
+                               headers: nil,
+                               responseKey: "") { (model: MockModel?, error: SNPError?) in
+                                guard let anError = error else {
+                                    XCTFail("Error should not be nil")
+                                    print(model!)
+                                    return
+                                }
+                                XCTAssertNotNil(anError)
+                                self.expectedString = "this is fake message"
+                                XCTAssertEqual(self.expectedString, anError.message)
+                                
+        }
+    }
 }

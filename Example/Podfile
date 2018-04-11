@@ -1,8 +1,16 @@
 use_frameworks!
-inhibit_all_warnings!
+platform :ios, '9.0'
 
-platform :ios, '8.0'
+def standard_pods
+    pod 'SNPNetwork', :path => '../'
+    pod 'Alamofire', '~> 4.7'
+end
+
+target 'SNPNetwork_Example' do
+  standard_pods
+end
 
 target 'SNPNetwork_Tests' do
-    pod 'SNPNetwork', :path => '../'
+    inherit! :search_paths
+    standard_pods
 end
