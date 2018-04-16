@@ -5,7 +5,6 @@
 [![License](https://img.shields.io/cocoapods/l/SNPNetwork.svg?style=flat)](http://cocoapods.org/pods/SNPNetwork)
 [![Platform](https://img.shields.io/cocoapods/p/SNPNetwork.svg?style=flat)](http://cocoapods.org/pods/SNPNetwork)
 
-#SNPNetwork
 SNPNetwork is a Swift-based HTTP networking library for iOS. It provides an interface on top of Alamofire
 that simplifies a number of common networking tasks. We've created it to add some features we needed in Snapp
 application which is not supported directly in Alamofire. Another key feature is a super-simplified JSON parsing
