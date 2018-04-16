@@ -8,9 +8,11 @@ end
 
 target 'SNPNetwork_Example' do
   standard_pods
+  pod 'SNPUtilities'
 end
 
 target 'SNPNetwork_Tests' do
     inherit! :search_paths
     standard_pods
+    pod 'SNPUtilities'
 end

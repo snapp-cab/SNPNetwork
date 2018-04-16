@@ -7,8 +7,8 @@
 //
 
 import Foundation
-
 import Alamofire
+import SNPUtilities
 
 public typealias Parameters = Alamofire.Parameters
 

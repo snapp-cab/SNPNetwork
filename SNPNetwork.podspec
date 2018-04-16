@@ -18,4 +18,5 @@ s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :t
 s.ios.deployment_target = '9.0'
 s.source_files = 'SNPNetwork/Classes'
 s.dependency 'Alamofire', '~> 4.0'
+s.dependency 'SNPUtilities'
 end
