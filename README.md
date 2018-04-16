@@ -35,7 +35,7 @@ completion: @escaping (T?, E?) -> Void)
 ```
 As you can see request is a generic function that returns expected model you want and also an error of type 'SNPError'. It is a class function which means that without making instance of SNPNetwork class you can use it anywhere.(SNPNetwork.request("www.test.com"))
 Parameters:
-url: url of interest to retrieve data. It should be String
+url: url of interest to retrieve data. It should be String<br/>
 method: is the type of request you look for and is an enumeration like this:
 ```ruby
 public enum HTTPMethod: String {
@@ -50,9 +50,9 @@ case trace   = "TRACE"
 case connect = "CONNECT"
 }
 ```
-parameters: is a dictionary like this [String: Any]
-headers: is a dictionary like this [String: String]
-responseKey: is expected path of response and will be like "Data.Information.Employee.Person"
+parameters: is a dictionary like this [String: Any]<br />
+headers: is a dictionary like this [String: String]<br />
+responseKey: is expected path of response and will be like "Data.Information.Employee.Person"<br />
 
 Example usage:
 ```ruby
@@ -88,8 +88,8 @@ class func download(_ url: String,
 progress: ((_ progress: Double) -> Void)?,
 completion: @escaping (_ status: String?) -> Void)
 ```
-url: url of interest to retrieve data. It should be String
-progress: show progress of downloading file
+url: url of interest to retrieve data. It should be String<br />
+progress: show progress of downloading file<br />
 As you can see download is a class function which means that without making instance of SNPNetwork class you can use it anywhere.(SNPNetwork.download("www.test.com"))
 
 Example usage:
