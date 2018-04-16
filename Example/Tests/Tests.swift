@@ -9,6 +9,7 @@
 import XCTest
 @testable import SNPNetwork
 import Alamofire
+@testable import SNPUtilities
 
 class Tests: XCTestCase {
     

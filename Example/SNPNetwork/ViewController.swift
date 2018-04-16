@@ -8,6 +8,7 @@
 
 import UIKit
 import SNPNetwork
+import SNPUtilities
 
 struct test: Codable {
     let str: String?
