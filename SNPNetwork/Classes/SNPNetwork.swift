@@ -13,37 +13,14 @@ import SNPUtilities
 public typealias Parameters = Alamofire.Parameters
 
 public class SNPNetwork {
-    static var localizedHeaderValue: String = {
-        let currentLanguage = UserDefaults.standard.object(forKey: UserDefaultsKeys.currentLanguage) as! String
-        
-        if currentLanguage.hasPrefix("fa") {
-            return "fa-IR"
-        } else if currentLanguage.hasPrefix("en") {
-            return "en-GB"
-        } else if currentLanguage.hasPrefix("fr") {
-            return "fr-FR"
-        } else {
-            // fallback to Farsi
-            return "fa-IR"
-        }
-    }()
     
     public class func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                                   method: HTTPMethod = .get,
-                                                   parameters: Parameters? = nil,
-                                                   encoding: ParameterEncoding = URLEncoding.default,
-                                                   headers: HTTPHeaders? = nil,
-                                                   responseKey: String? = nil,
-                                                   completion: @escaping (T?, E?) -> Void) {
-        
-        var localizedHeaders: HTTPHeaders
-        if headers == nil {
-            localizedHeaders = ["locale": localizedHeaderValue]
-        } else {
-            localizedHeaders = headers!
-            localizedHeaders["locale"] = localizedHeaderValue
-        }
-        
+                                                         method: HTTPMethod = .get,
+                                                         parameters: Parameters? = nil,
+                                                         encoding: ParameterEncoding = URLEncoding.default,
+                                                         headers: HTTPHeaders? = nil,
+                                                         responseKey: String? = nil,
+                                                         completion: @escaping (T?, E?) -> Void) {
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
@@ -89,8 +66,8 @@ public class SNPNetwork {
     }
     
     public class func download(_ url: String,
-                        progress: ((_ progress: Double) -> Void)?,
-                        completion: @escaping (_ status: String?) -> Void) {
+                               progress: ((_ progress: Double) -> Void)?,
+                               completion: @escaping (_ status: String?) -> Void) {
         Utilities.clearTempDirectory()
         let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
         
