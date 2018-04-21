@@ -16,7 +16,7 @@ public class SNPNetwork {
     
     private static var defaultHeaders: HTTPHeaders?
     
-    class func setDefaultHeaders(headers: HTTPHeaders) {
+    public class func setDefaultHeaders(headers: HTTPHeaders) {
         defaultHeaders = headers
     }
     
