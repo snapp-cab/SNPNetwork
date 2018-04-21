@@ -45,7 +45,13 @@ extension Dictionary {
         return result
     }
     
-    /// Merge and return a new dictionary
+    /**
+     Merge and return a new dictionary.
+     
+     - Parameter with: is dictionary.
+     
+     - Returns: dictionary.
+     */
     func merge(with: [Key: Value]?) -> [Key: Value]? {
         var copy = self
         for (key, val) in with! {

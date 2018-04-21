@@ -16,6 +16,13 @@ public class SNPNetwork {
     
     private static var defaultHeaders: HTTPHeaders?
     
+    /**
+     sets default headers for all requests.
+     
+     - Parameter headers: desired headers to be set
+     
+     - Returns: nothing.
+     */
     public class func setDefaultHeaders(headers: HTTPHeaders) {
         defaultHeaders = headers
     }
@@ -36,6 +43,18 @@ public class SNPNetwork {
         }
     }
     
+    /**
+     To make reqeut to url.
+     
+     - Parameter url: url of interest to retrieve data. It should be String
+     - Parameter method: is the type of request you look for.
+     - Parameter parameters: is a dictionary like this [String: Any]
+     - Parameter headers: is a dictionary like this [String: String]
+     - Parameter appendDefaultHeaders: is of type Bool. If you set default headers for request, this flag is responsible to append defaultHeader to 'headers' parameter by default, else(appendDefaultHeaders = false)  default headers will be replaced with 'headers' parameter.
+     - Parameter responseKey: is expected path of response and will be like "Data.Information.Employee.Person"
+     
+     - Returns: T, which T is Decodable, and E is kind of SNPError.
+     */
     public class func request<T: Decodable, E: SNPError>(url: URLConvertible,
                                                          method: HTTPMethod = .get,
                                                          parameters: Parameters? = nil,
@@ -88,6 +107,13 @@ public class SNPNetwork {
         }
     }
     
+    /**
+     To download a file.
+     
+     - Parameter url: url of interest to retrieve data. It should be String
+     - Parameter progress: show progress of download.
+     - Returns: N/A.
+     */
     public class func download(_ url: String,
                                progress: ((_ progress: Double) -> Void)?,
                                completion: @escaping (_ status: String?) -> Void) {
