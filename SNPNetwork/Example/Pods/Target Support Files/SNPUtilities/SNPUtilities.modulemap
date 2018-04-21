@@ -1,0 +1,6 @@
+framework module SNPUtilities {
+  umbrella header "SNPUtilities-umbrella.h"
+
+  export *
+  module * { export * }
+}
