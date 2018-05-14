@@ -117,7 +117,7 @@ public class SNPNetwork {
     public class func download(_ url: String,
                                progress: ((_ progress: Double) -> Void)?,
                                completion: @escaping (_ status: String?) -> Void) {
-        Utilities.clearTempDirectory()
+        SNPUtilities.clearTempDirectory()
         let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
         
         Alamofire.download(url, to: destination)

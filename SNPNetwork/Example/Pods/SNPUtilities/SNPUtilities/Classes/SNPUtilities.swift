@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Utilities {
+public class SNPUtilities {
     public class func clearTempDirectory() {
         
         let fileManager = FileManager.default
