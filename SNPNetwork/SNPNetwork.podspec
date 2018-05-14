@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'SNPNetwork'
-    s.version          = '0.1.3'
+    s.version          = '0.1.4'
     s.summary          = 'SNPNetwork is a Swift-based HTTP networking library for iOS.'
     
     s.description      = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
     
     s.ios.deployment_target = '9.0'
-    s.source_files = 'SNPNetwork/SNPNetwork/Classes'
+    s.source_files = 'SNPNetwork/Classes'
     s.dependency 'Alamofire', '~> 4.0'
     s.dependency 'SNPUtilities'
 end
