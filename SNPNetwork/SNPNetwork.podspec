@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'SNPNetwork'
-    s.version          = '0.1.4'
+    s.version          = '0.1.5'
     s.summary          = 'SNPNetwork is a Swift-based HTTP networking library for iOS.'
     
     s.description      = <<-DESC
@@ -11,12 +11,12 @@ Pod::Spec.new do |s|
     DESC
     
     s.homepage         = 'https://github.com/snapp-cab/SNPNetwork'
-    s.license          = { :type => 'MIT', :file => 'LICENSE' }
+    s.license          = { :type => 'MIT', :file => 'SNPNetwork/LICENSE' }
     s.author           = { 'Arash Z.Jahangiri' => 'arashzjahangiri@gmail.com' }
     s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
     
     s.ios.deployment_target = '9.0'
-    s.source_files = 'SNPNetwork/Classes'
+    s.source_files = 'SNPNetwork/SNPNetwork/Classes'
     s.dependency 'Alamofire', '~> 4.0'
     s.dependency 'SNPUtilities'
 end
