@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'SNPNetwork'
-    s.version          = '0.1.2'
+    s.version          = '0.1.3'
     s.summary          = 'SNPNetwork is a Swift-based HTTP networking library for iOS.'
     
     s.description      = <<-DESC
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
     DESC
     
     s.homepage         = 'https://github.com/snapp-cab/SNPNetwork'
-    s.license          = { :type => 'MIT', :file => 'SNPNetwork/LICENSE' }
+    s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.author           = { 'Arash Z.Jahangiri' => 'arashzjahangiri@gmail.com' }
     s.source           = { :git => 'https://github.com/snapp-cab/SNPNetwork.git', :tag => s.version.to_s }
     
