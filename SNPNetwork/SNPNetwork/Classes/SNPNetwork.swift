@@ -61,7 +61,7 @@ public class SNPNetwork {
                                                          encoding: ParameterEncoding = URLEncoding.default,
                                                          headers: HTTPHeaders? = nil,
                                                          appendDefaultHeaders: Bool = true,
-                                                         responseKey: String? = nil,
+                                                         responseKey: String = "",
                                                          completion: @escaping (T?, E?) -> Void) {
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
@@ -78,15 +78,9 @@ public class SNPNetwork {
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
                 if statusCode.isAValidHTTPCode {
                     do {
-                        let resultDic = try JSONDecoder().decode(SNPDecodable.self,
-                                                                 from: jsonData).value as! [String: Any]
-                        if responseKey == nil {
-                            let result = resultDic as? T
-                            completion(result, nil)
-                        } else {
-                            let result: T = resultDic.toModel(key: responseKey)
-                            completion(result, nil)
-                        }
+                        let resultDic = try JSONDecoder().decode(SNPDecodable.self, from: jsonData).value as! [String: Any]
+                        let result: T = resultDic.toModel(key: responseKey)
+                        completion(result, nil)
                     } catch {
                         // error parsing response to T
                         completion(nil, genericError)
