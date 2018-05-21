@@ -19,8 +19,7 @@ extension Dictionary {
      */
     func convertToModel<T: Decodable>() -> T? {
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self,
-                                                      options: .prettyPrinted)
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
             let decoder = JSONDecoder()
             let result = try decoder.decode(T.self, from: jsonData)
             return result
@@ -40,8 +39,8 @@ extension Dictionary {
      */
     func toModel<T: Decodable>(key: String?) -> T {
         let array = key?.components(separatedBy: ".")
-        let finalDic = self.getValue(forKeyPath: array!)
-        let result: T = finalDic!.convertToModel()!
+        let finalDic = getValue(forKeyPath: array!)
+        let result: T = finalDic.convertToModel()!
         return result
     }
     
@@ -70,17 +69,20 @@ extension Dictionary where Key: Any, Value: Any {
      
      - Returns: A dictionary.
      */
-    func getValue(forKeyPath components: [Any]) -> [String: AnyObject]? {
+    func getValue(forKeyPath components: [Any]) -> [String: AnyObject] {
         var comps = components
         let key = comps.remove(at: 0)
         if let aKey = key as? Key {
+            if aKey is String && (aKey as! String) == "" {
+                return self as! [String: AnyObject]
+            }
             if comps.count == 0 {
-                return self[aKey] as? [String: AnyObject]
+                return self[aKey] as! [String: AnyObject]
             }
             if let value = self[aKey] as? [String: AnyObject] {
                 return value.getValue(forKeyPath: comps)
             }
         }
-        return nil
+        return [:]
     }
 }
