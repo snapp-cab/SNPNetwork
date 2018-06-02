@@ -126,4 +126,8 @@ class Tests: XCTestCase {
                                 
         }
     }
+    
+    func testValidHTTPCode() {
+        
+    }
 }

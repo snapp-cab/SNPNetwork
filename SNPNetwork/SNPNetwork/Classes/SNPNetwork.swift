@@ -13,7 +13,7 @@ import SNPUtilities
 public typealias Parameters = Alamofire.Parameters
 
 public class SNPNetwork {
-    
+    // MARK: - Properties
     private static var defaultHeaders: HTTPHeaders?
     
     /**
@@ -42,6 +42,10 @@ public class SNPNetwork {
             }
         }
     }
+    
+    public static var delegate: SNPNetworkAuthenticationDelegate?
+    private static var shouldQueue = false
+    private static var queue = [SNPNetworkRequest<<#T: Decodable#>, SNPError>]()
     
     /**
      To make reqeut to url.
@@ -74,29 +78,49 @@ public class SNPNetwork {
                                                  encoding: encoding,
                                                  headers: header)
         
+        
+        if shouldQueue {
+            queue.append(request)
+            return
+        }
+        
         alamofireRequest.responseData { response in
-            if let statusCode = response.response?.statusCode, let jsonData = response.value {
-                if statusCode.isAValidHTTPCode {
-                    do {
-                        let resultDic = try JSONDecoder().decode(SNPDecodable.self, from: jsonData).value as! [String: Any]
-                        let result: T = resultDic.toModel(key: responseKey)
-                        completion(result, nil)
-                    } catch {
-                        // error parsing response to T
-                        completion(nil, genericError)
+            let snpNetworkResponse = SNPNetworkResponse()
+            shouldQueue = delegate?.shouldStartQueueing(networkResponse: response) {
+                // always authenticated
+                self.shouldQueue = false
+                self.queue = self.delegate.updateRequests(self.queue)
+                for request in self.queue {
+                    request.do()
+                }
+            }
+                
+            if shouldQueue {
+                self.queue.append(request)
+            } else {
+                if let statusCode = response.response?.statusCode, let jsonData = response.value {
+                    if statusCode.isAValidHTTPCode {
+                        do {
+                            let resultDic = try JSONDecoder().decode(SNPDecodable.self, from: jsonData).value as! [String: Any]
+                            let result: T = resultDic.toModel(key: responseKey)
+                            completion(result, nil)
+                        } catch {
+                            // error parsing response to T
+                            completion(nil, genericError)
+                        }
+                    } else {
+                        do {
+                            let error = try JSONDecoder().decode(E.self, from: jsonData)
+                            completion(nil, error)
+                        } catch {
+                            // error parsing response to E
+                            completion(nil, genericError)
+                        }
                     }
                 } else {
-                    do {
-                        let error = try JSONDecoder().decode(E.self, from: jsonData)
-                        completion(nil, error)
-                    } catch {
-                        // error parsing response to E
-                        completion(nil, genericError)
-                    }
+                    // unknown network error
+                    completion(nil, genericError)
                 }
-            } else {
-                // unknown network error
-                completion(nil, genericError)
             }
         }
     }
