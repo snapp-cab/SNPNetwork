@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "UIImage+animatedGIF.h"
 
 FOUNDATION_EXPORT double SNPUtilitiesVersionNumber;
 FOUNDATION_EXPORT const unsigned char SNPUtilitiesVersionString[];

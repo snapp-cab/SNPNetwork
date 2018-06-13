@@ -29,8 +29,4 @@ public class SNPError: Codable {
         let genericErrorMessage =  NSLocalizedString("Unknown error", comment: "Generic error")
         return SNPError(domain: SNPErrorDomain.generic, code: -1, message: genericErrorMessage)
     }
-    
-    class func authentication(type: SNPAuthenticationError) -> SNPError {
-        return SNPError(domain: SNPErrorDomain.authentication, code: type.code, message: type.message)
-    }
 }

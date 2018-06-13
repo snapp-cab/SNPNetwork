@@ -10,7 +10,6 @@ import Foundation
 
 public class SNPUtilities {
     public class func clearTempDirectory() {
-        
         let fileManager = FileManager.default
         do {
             if #available(iOS 10.0, *) {
@@ -31,21 +30,16 @@ public class SNPUtilities {
                     print(error.localizedDescription)
                 }
             }
-            
         } catch let error as NSError {
             print(error.localizedDescription)
         }
     }
     
     public class func searchAndDeleteFilesInDocumentsFolder(ext: String) {
-        
         let fileManager = FileManager.default
-        let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         do {
-            let directoryUrls = try  fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions())
-            //            let Files = directoryUrls.filter {$0.pathExtension == ext}.map {$0.lastPathComponent}
-            //            print(Files)
+            let directoryUrls = try  fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions())
             for file in directoryUrls {
                 try fileManager.removeItem(at: file)
             }
