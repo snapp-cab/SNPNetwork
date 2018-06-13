@@ -1,0 +1,29 @@
+PODS:
+  - Alamofire (4.7.2)
+  - SNPNetwork (0.1.5):
+    - Alamofire (~> 4.0)
+    - SNPUtilities
+  - SNPUtilities (1.1.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - SNPNetwork (from `../`)
+  - SNPUtilities
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - SNPUtilities
+
+EXTERNAL SOURCES:
+  SNPNetwork:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  SNPNetwork: e048498d02fc7f049818d807e36f85b7332f73e8
+  SNPUtilities: dc941dbd42a60db8f8d1c2f47b98dcce9a0c9ca5
+
+PODFILE CHECKSUM: 84ae7fdda34a2e6564b6c96c55057e5fb4dea4b2
+
+COCOAPODS: 1.5.3
