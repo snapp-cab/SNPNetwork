@@ -14,6 +14,8 @@ SNPUtilities is a Swift-based helper library for iOS. Our plan is to add any hel
 6. Extension to Int.<br/>
 7. Extension to UIDevice.<br/>
 8. Category for UIImage(Objective-C).<br/>
+9. Keychain wrapper.<br/>
+10. Extension to NSString.<br/>
 
 ## Getting Started
 

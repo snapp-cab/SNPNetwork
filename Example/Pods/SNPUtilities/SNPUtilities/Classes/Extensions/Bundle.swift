@@ -8,18 +8,18 @@
 import Foundation
 
 extension Bundle {
-    func load<T>(_ nibName: String = String(describing: T.self)) -> T {
+    public func load<T>(_ nibName: String = String(describing: T.self)) -> T {
         return loadNibNamed(nibName, owner: nil, options: nil)?.first as! T
     }
     
-    func info(for key: String) -> String! {
+    public func info(for key: String) -> String! {
         guard let value = infoDictionary?[key] else {
             return nil
         }
         return (value as! String).replacingOccurrences(of: "\\", with: "")
     }
     
-    func read(fileName: String, type: String) -> String? {
+    public func read(fileName: String, type: String) -> String? {
         if let path = self.path(forResource: fileName, ofType: type) {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
