@@ -10,6 +10,10 @@
 #endif
 #endif
 
+#import "UIImage+Localized.h"
+#import "NYXImagesHelper.h"
+#import "NYXImagesKit.h"
+#import "UIImage+Rotating.h"
 #import "UIImage+animatedGIF.h"
 
 FOUNDATION_EXPORT double SNPUtilitiesVersionNumber;

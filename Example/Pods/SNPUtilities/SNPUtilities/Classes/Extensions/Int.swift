@@ -9,7 +9,7 @@
 import Foundation
 
 extension Int {
-    var isAValidHTTPCode: Bool {
+    public var isAValidHTTPCode: Bool {
         return (self >= 200 && self <= 299)
     }
 }

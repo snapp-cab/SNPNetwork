@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIDevice {
-    var modelName: String {
+    public var modelName: String {
         var systemInfo = utsname()
         uname(&systemInfo)
 
@@ -19,5 +19,9 @@ extension UIDevice {
             return identifier + String(UnicodeScalar(UInt8(value)))
         }
         return identifier
+    }
+    
+    public var hasNotch: Bool {
+        return modelName == "iPhone10,3" || modelName == "iPhone10,6" || modelName.hasPrefix("iPhone11")
     }
 }

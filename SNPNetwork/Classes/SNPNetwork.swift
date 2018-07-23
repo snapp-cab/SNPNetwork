@@ -12,10 +12,24 @@ import SNPUtilities
 
 public typealias Parameters = Alamofire.Parameters
 
-public class SNPNetwork {
+protocol SNPNetworkProtocol {
+    func request<T: Decodable, E: SNPError>(url: URLConvertible,
+                                            method: HTTPMethod,
+                                            parameters: Parameters?,
+                                            encoding: ParameterEncoding,
+                                            headers: HTTPHeaders?,
+                                            appendDefaultHeaders: Bool,
+                                            responseKey: String,
+                                            completion: @escaping (T?, E?) -> Void)
     
-    private static var defaultHeaders: HTTPHeaders?
-    
+    func download(_ url: String,
+                  progress: ((_ progress: Double) -> Void)?,
+                  completion: @escaping (_ status: String?) -> Void)
+}
+open class SNPNetwork: SNPNetworkProtocol {
+    // MARK: Properties
+    open static let shared = SNPNetwork()
+    private var defaultHeaders: HTTPHeaders?
     /**
      sets default headers for all requests.
      
@@ -23,11 +37,11 @@ public class SNPNetwork {
      
      - Returns: nothing.
      */
-    public class func setDefaultHeaders(headers: HTTPHeaders) {
+    open func setDefaultHeaders(headers: HTTPHeaders) {
         defaultHeaders = headers
     }
     
-    private class func appendHeaders(shouldAppend: Bool, headers: HTTPHeaders?) -> HTTPHeaders? {
+    open func appendHeaders(shouldAppend: Bool, headers: HTTPHeaders?) -> HTTPHeaders? {
         if shouldAppend == false {
             //just replace input headers with defaultHeaders
             defaultHeaders = headers
@@ -55,14 +69,14 @@ public class SNPNetwork {
      
      - Returns: T, which T is Decodable, and E is kind of SNPError.
      */
-    public class func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                                         method: HTTPMethod = .get,
-                                                         parameters: Parameters? = nil,
-                                                         encoding: ParameterEncoding = URLEncoding.default,
-                                                         headers: HTTPHeaders? = nil,
-                                                         appendDefaultHeaders: Bool = true,
-                                                         responseKey: String = "",
-                                                         completion: @escaping (T?, E?) -> Void) {
+    open func request<T: Decodable, E: SNPError>(url: URLConvertible,
+                                                 method: HTTPMethod = .get,
+                                                 parameters: Parameters? = nil,
+                                                 encoding: ParameterEncoding = URLEncoding.default,
+                                                 headers: HTTPHeaders? = nil,
+                                                 appendDefaultHeaders: Bool = true,
+                                                 responseKey: String = "",
+                                                 completion: @escaping (T?, E?) -> Void) {
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
@@ -108,9 +122,9 @@ public class SNPNetwork {
      - Parameter progress: show progress of download.
      - Returns: N/A.
      */
-    public class func download(_ url: String,
-                               progress: ((_ progress: Double) -> Void)?,
-                               completion: @escaping (_ status: String?) -> Void) {
+    open func download(_ url: String,
+                       progress: ((_ progress: Double) -> Void)?,
+                       completion: @escaping (_ status: String?) -> Void) {
         SNPUtilities.clearTempDirectory()
         let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
         

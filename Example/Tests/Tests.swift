@@ -21,10 +21,13 @@ class Tests: XCTestCase {
     }
     
     func testDownloadWasSuccessful() {
-        
-        class MockSNPNetwork: SNPNetwork {
-            static var wasDownloadSuccessful = false
-            override class func download(_ url: String,
+        class MockSNPNetwork: SNPNetworkProtocol {
+            static let shared = MockSNPNetwork()
+            var wasDownloadSuccessful = false
+            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
+                
+            }
+            func download(_ url: String,
                                          progress:((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ status: String?) -> Void) {
                 wasDownloadSuccessful = true
@@ -32,19 +35,23 @@ class Tests: XCTestCase {
             }
         }
         
-        MockSNPNetwork.download(mockURL, progress: nil, completion: { (status) in
+        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (status) in
             self.expectedString = status!
         })
         
-        XCTAssertTrue(MockSNPNetwork.wasDownloadSuccessful)
-        XCTAssertEqual( expectedString, "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.wasDownloadSuccessful)")
+        XCTAssertTrue(MockSNPNetwork.shared.wasDownloadSuccessful)
+        XCTAssertEqual( expectedString, "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.shared.wasDownloadSuccessful)")
     }
     
     func testDownloadWasFailed() {
-        
-        class MockSNPNetwork: SNPNetwork {
-            static var wasDownloadSuccessful = true
-            override class func download(_ url: String,
+        class MockSNPNetwork: SNPNetworkProtocol {
+            static let shared = MockSNPNetwork()
+            var wasDownloadSuccessful = true
+            
+            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
+                
+            }
+            func download(_ url: String,
                                          progress: ((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ status: String?) -> Void) {
                 wasDownloadSuccessful = false
@@ -52,35 +59,32 @@ class Tests: XCTestCase {
             }
         }
         
-        MockSNPNetwork.download(mockURL, progress: nil, completion: { (status) in
+        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (status) in
             self.expectedString = status!
         })
         
-        XCTAssertFalse(MockSNPNetwork.wasDownloadSuccessful)
-        XCTAssertEqual(expectedString, "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.wasDownloadSuccessful)")
+        XCTAssertFalse(MockSNPNetwork.shared.wasDownloadSuccessful)
+        XCTAssertEqual(expectedString, "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.shared.wasDownloadSuccessful)")
     }
     
     func testRequestReturnsData() {
-        
-        class MockSNPNetwork: SNPNetwork {
-            static let fakeResult = MockModel(mockData: "mockData")
-            override class func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                                                   method: HTTPMethod = .get,
-                                                                   parameters: Parameters? = nil,
-                                                                   encoding: ParameterEncoding = URLEncoding.default,
-                                                                   headers: HTTPHeaders? = nil,
-                                                                   appendDefaultHeaders: Bool = true,
-                                                                   responseKey: String? = nil,
-                                                                   completion: @escaping (T?, E?) -> Void) {
+        class MockSNPNetwork: SNPNetworkProtocol {
+            static let shared = MockSNPNetwork()
+            let fakeResult = MockModel(mockData: "mockData")
+            
+            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(fakeResult as? T, nil)
+            }
+            func download(_ url: String, progress: ((Double) -> Void)?, completion: @escaping (String?) -> Void) {
+                
             }
         }
         
-        MockSNPNetwork.request(url: mockURL,
+        MockSNPNetwork.shared.request(url: mockURL,
                                method: .get,
                                parameters: nil,
                                encoding: URLEncoding.default,
-                               headers: nil,
+                               headers: nil, appendDefaultHeaders: false,
                                responseKey: "") { (model: MockModel?, error: SNPError?) in
                                 guard let aModel = model else {
                                     XCTFail("Model should not be nil")
@@ -94,26 +98,23 @@ class Tests: XCTestCase {
     }
     
     func testRequestReturnsNil() {
-        
-        class MockSNPNetwork: SNPNetwork {
-            static let fakeError = SNPError(domain: "FakeDomain", code: 987, message: "this is fake message")
-            override class func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                                                   method: HTTPMethod = .get,
-                                                                   parameters: Parameters? = nil,
-                                                                   encoding: ParameterEncoding = URLEncoding.default,
-                                                                   headers: HTTPHeaders? = nil,
-                                                                   appendDefaultHeaders: Bool = true,
-                                                                   responseKey: String? = nil,
-                                                                   completion: @escaping (T?, E?) -> Void) {
+        class MockSNPNetwork: SNPNetworkProtocol {
+            static let shared = MockSNPNetwork()
+            let fakeError = SNPError(domain: "FakeDomain", code: 987, message: "this is fake message")
+            
+            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(nil, fakeError as? E)
+            }
+            func download(_ url: String, progress: ((Double) -> Void)?, completion: @escaping (String?) -> Void) {
+                
             }
         }
         
-        MockSNPNetwork.request(url: mockURL,
+        MockSNPNetwork.shared.request(url: mockURL,
                                method: .get,
                                parameters: nil,
                                encoding: URLEncoding.default,
-                               headers: nil,
+                               headers: nil, appendDefaultHeaders: false,
                                responseKey: "") { (model: MockModel?, error: SNPError?) in
                                 guard let anError = error else {
                                     XCTFail("Error should not be nil")

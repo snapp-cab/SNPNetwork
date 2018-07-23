@@ -69,11 +69,11 @@ As you can see download is a class function which means that without making inst
 ## Example usage:
 0) set default headers:
 ```ruby
-SNPNetwork.setDefaultHeaders(headers: ["iOS-Ver":"11.0"])
+SNPNetwork.shared.setDefaultHeaders(headers: ["iOS-Ver":"11.0"])
 ```
 1) common networking tasks:
 ```ruby
-SNPNetwork.request(url: "www.test.com",
+SNPNetwork.shared.request(url: "www.test.com",
 method: .post,
 parameters: parameters(),
 encoding: JSONEncoding.default,
@@ -88,7 +88,7 @@ print(error!)
 --OR--
 
 ```ruby
-SNPNetwork.request(url: "www.test.com") { (config: Config?, error: SNPError?) in
+SNPNetwork.shared.request(url: "www.test.com") { (config: Config?, error: SNPError?) in
 if error == nil {
 self.config = config
 } else {
@@ -100,7 +100,7 @@ print(error!)
 2) download tasks:
 
 ```ruby
-SNPNetwork.download("www.test.com", progress: {(progress) in
+SNPNetwork.shared.download("www.test.com", progress: {(progress) in
 print(progress)
 }, completion: {(status) in
 print(status!)
@@ -108,7 +108,7 @@ print(status!)
 ```
 --OR--
 ```ruby
-SNPNetwork.download("www.test.com", progress: nil, completion: {(status) in
+SNPNetwork.shared.download("www.test.com", progress: nil, completion: {(status) in
 print(status!)
 })
 

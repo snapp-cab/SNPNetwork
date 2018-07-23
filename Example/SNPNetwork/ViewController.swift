@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        SNPNetwork.request(url: "") { (model: test?, error: SNPError?) in
+        SNPNetwork.shared.request(url: "") { (model: test?, error: SNPError?) in
             print(model?.str! ?? "")
         }
     }
