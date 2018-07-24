@@ -12,8 +12,8 @@ import SNPUtilities
 
 public typealias Parameters = Alamofire.Parameters
 
-protocol SNPNetworkProtocol {
-    func request<T: Decodable, E: SNPError>(url: URLConvertible,
+public protocol SNPNetworkProtocol {
+     func request<T: Decodable, E: SNPError>(url: URLConvertible,
                                             method: HTTPMethod,
                                             parameters: Parameters?,
                                             encoding: ParameterEncoding,
@@ -25,6 +25,23 @@ protocol SNPNetworkProtocol {
     func download(_ url: String,
                   progress: ((_ progress: Double) -> Void)?,
                   completion: @escaping (_ status: String?) -> Void)
+}
+extension SNPNetworkProtocol {
+    func request<T: Decodable, E: SNPError>(url: URLConvertible,
+                 method: HTTPMethod,
+                 parameters: Parameters?,
+                 encoding: ParameterEncoding,
+                 headers: HTTPHeaders?,
+                 appendDefaultHeaders: Bool,
+                 responseKey: String,
+                 completion: @escaping (T?, E?) -> Void) {
+        
+    }
+    func download(_ url: String,
+                  progress: ((_ progress: Double) -> Void)?,
+                  completion: @escaping (_ status: String?) -> Void) {
+        
+    }
 }
 open class SNPNetwork: SNPNetworkProtocol {
     // MARK: Properties

@@ -24,9 +24,6 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             var wasDownloadSuccessful = false
-            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
-                
-            }
             func download(_ url: String,
                                          progress:((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ status: String?) -> Void) {
@@ -47,10 +44,6 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             var wasDownloadSuccessful = true
-            
-            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
-                
-            }
             func download(_ url: String,
                                          progress: ((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ status: String?) -> Void) {
@@ -71,12 +64,8 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             let fakeResult = MockModel(mockData: "mockData")
-            
             func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(fakeResult as? T, nil)
-            }
-            func download(_ url: String, progress: ((Double) -> Void)?, completion: @escaping (String?) -> Void) {
-                
             }
         }
         
@@ -104,9 +93,6 @@ class Tests: XCTestCase {
             
             func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(nil, fakeError as? E)
-            }
-            func download(_ url: String, progress: ((Double) -> Void)?, completion: @escaping (String?) -> Void) {
-                
             }
         }
         

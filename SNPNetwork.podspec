@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'SNPNetwork'
-    s.version          = '0.2.0'
+    s.version          = '0.2.1'
     s.summary          = 'SNPNetwork is a Swift-based HTTP networking library for iOS.'
     
     s.description      = <<-DESC
