@@ -26,18 +26,19 @@ class Tests: XCTestCase {
             var wasDownloadSuccessful = false
             func download(_ url: String,
                                          progress:((_ progress: Double) -> Void)?,
-                                         completion: @escaping (_ status: String?) -> Void) {
+                                         completion: @escaping (_ result: DownloadResult) -> Void) {
                 wasDownloadSuccessful = true
-                completion("Downloading file was successful and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)")
+                let resultString = "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
+                completion(.success(resultString))
             }
         }
         
-        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (status) in
-            self.expectedString = status!
+        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (result) in
+            self.expectedString = result.get()!
         })
         
         XCTAssertTrue(MockSNPNetwork.shared.wasDownloadSuccessful)
-        XCTAssertEqual( expectedString, "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.shared.wasDownloadSuccessful)")
+        XCTAssertEqual(expectedString, "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(MockSNPNetwork.shared.wasDownloadSuccessful)")
     }
     
     func testDownloadWasFailed() {
@@ -46,14 +47,15 @@ class Tests: XCTestCase {
             var wasDownloadSuccessful = true
             func download(_ url: String,
                                          progress: ((_ progress: Double) -> Void)?,
-                                         completion: @escaping (_ status: String?) -> Void) {
+                                         completion: @escaping (_ result: DownloadResult) -> Void) {
                 wasDownloadSuccessful = false
-                completion("Downloading file was failed and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)")
+                let resultString = "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
+                completion(.failure(resultString))
             }
         }
         
-        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (status) in
-            self.expectedString = status!
+        MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (result) in
+            self.expectedString = result.get()!
         })
         
         XCTAssertFalse(MockSNPNetwork.shared.wasDownloadSuccessful)

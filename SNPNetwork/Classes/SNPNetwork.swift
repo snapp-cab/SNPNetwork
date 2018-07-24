@@ -10,6 +10,19 @@ import Foundation
 import Alamofire
 import SNPUtilities
 
+public enum DownloadResult {
+    case success(String)
+    case failure(String?)
+    
+    func get() -> String? {
+        switch self {
+        case .success(let result):
+            return result
+        case .failure(let result):
+            return result
+        }
+    }
+}
 public typealias Parameters = Alamofire.Parameters
 
 public protocol SNPNetworkProtocol {
@@ -24,9 +37,9 @@ public protocol SNPNetworkProtocol {
     
     func download(_ url: String,
                   progress: ((_ progress: Double) -> Void)?,
-                  completion: @escaping (_ status: String?) -> Void)
+                  completion: @escaping (_ result: DownloadResult) -> Void)
 }
-extension SNPNetworkProtocol {
+public extension SNPNetworkProtocol {
     func request<T: Decodable, E: SNPError>(url: URLConvertible,
                  method: HTTPMethod,
                  parameters: Parameters?,
@@ -39,7 +52,7 @@ extension SNPNetworkProtocol {
     }
     func download(_ url: String,
                   progress: ((_ progress: Double) -> Void)?,
-                  completion: @escaping (_ status: String?) -> Void) {
+                  completion: @escaping (_ result: DownloadResult) -> Void) {
         
     }
 }
@@ -141,7 +154,7 @@ open class SNPNetwork: SNPNetworkProtocol {
      */
     open func download(_ url: String,
                        progress: ((_ progress: Double) -> Void)?,
-                       completion: @escaping (_ status: String?) -> Void) {
+                       completion: @escaping (_ result: DownloadResult) -> Void) {
         SNPUtilities.clearTempDirectory()
         let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
         
@@ -151,9 +164,9 @@ open class SNPNetwork: SNPNetworkProtocol {
             })
             .response(completionHandler: { defaultDownloadResponse in
                 if let error = defaultDownloadResponse.error {
-                    completion(error.localizedDescription)
+                    completion(.failure(error.localizedDescription))
                 } else {
-                    completion("Downloaded file successfully to \(destination)")
+                    completion(.success("Downloaded file successfully to \(destination)"))
                 }
             })
     }
