@@ -12,4 +12,17 @@ extension Int {
     public var isAValidHTTPCode: Bool {
         return (self >= 200 && self <= 299)
     }
+    
+    public var c_type_bool: Bool {
+            return self == 0 ? false : true
+    }
+    
+    public init?(string: String?) {
+        guard let string = string else {
+            return nil
+        }
+        self.init(string)
+        
+    }
+    
 }

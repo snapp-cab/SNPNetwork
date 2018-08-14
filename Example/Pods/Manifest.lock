@@ -8,22 +8,29 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.7)
   - SNPNetwork (from `../`)
-  - SNPUtilities
+  - SNPUtilities (from `https://github.com/snapp-cab/SNPUtilities.git`, branch `dev`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
-    - SNPUtilities
 
 EXTERNAL SOURCES:
   SNPNetwork:
     :path: "../"
+  SNPUtilities:
+    :branch: dev
+    :git: https://github.com/snapp-cab/SNPUtilities.git
+
+CHECKOUT OPTIONS:
+  SNPUtilities:
+    :commit: 29c87883bf68c7996df49ab810a6ba8a8875990f
+    :git: https://github.com/snapp-cab/SNPUtilities.git
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   SNPNetwork: 149d83e0244c0f484b49675ce422148c4b3ad461
   SNPUtilities: 94054c67a95a3f165984c45a2f42eaf89322ab9d
 
-PODFILE CHECKSUM: 84ae7fdda34a2e6564b6c96c55057e5fb4dea4b2
+PODFILE CHECKSUM: 3ada5a6d48b24b71e13f5efb6bf8545c22aed4d4
 
 COCOAPODS: 1.5.3

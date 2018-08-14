@@ -30,7 +30,7 @@ public enum DownloadResult {
 public typealias Parameters = Alamofire.Parameters
 
 public protocol SNPNetworkProtocol {
-     func request<T: Decodable, E: SNPError>(url: URLConvertible,
+    func request<T: Decodable, E: SNPError>(url: URLConvertible,
                                             method: HTTPMethod,
                                             parameters: Parameters?,
                                             encoding: ParameterEncoding,
@@ -50,15 +50,16 @@ public protocol SNPNetworkProtocol {
                   progress: ((_ progress: Double) -> Void)?,
                   completion: @escaping (_ result: DownloadResult) -> Void)
 }
+
 public extension SNPNetworkProtocol {
     func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                 method: HTTPMethod,
-                 parameters: Parameters?,
-                 encoding: ParameterEncoding,
-                 headers: HTTPHeaders?,
-                 appendDefaultHeaders: Bool,
-                 responseKey: String,
-                 completion: @escaping (T?, E?) -> Void) {
+                                            method: HTTPMethod,
+                                            parameters: Parameters?,
+                                            encoding: ParameterEncoding,
+                                            headers: HTTPHeaders?,
+                                            appendDefaultHeaders: Bool,
+                                            responseKey: String,
+                                            completion: @escaping (T?, E?) -> Void) {
         
     }
     func request<T: Decodable, E: SNPError>(url: URLConvertible,
@@ -74,13 +75,16 @@ public extension SNPNetworkProtocol {
     func download(_ url: String,
                   progress: ((_ progress: Double) -> Void)?,
                   completion: @escaping (_ result: DownloadResult) -> Void) {
-        
     }
 }
+
 open class SNPNetwork: SNPNetworkProtocol {
     // MARK: Properties
     open static let shared = SNPNetwork()
     private var defaultHeaders: HTTPHeaders?
+    private var queue = [SNPNetworkRequest]()
+    private var mustQueue = false
+    open var delegate: SNPAuthenticationDelegate?
     /**
      sets default headers for all requests.
      
@@ -109,7 +113,7 @@ open class SNPNetwork: SNPNetworkProtocol {
     }
     
     /**
-     To make reqeut to url.
+     To make request to url.
      
      - Parameter url: url of interest to retrieve data. It should be String
      - Parameter method: is the type of request you look for.
@@ -134,8 +138,6 @@ open class SNPNetwork: SNPNetworkProtocol {
                 return
             }
             completion(result, error)
-            
-            
         })
     }
     
@@ -153,7 +155,6 @@ open class SNPNetwork: SNPNetworkProtocol {
                 return
             }
             completion(arrayRes.toModel(key: nil),error)
-            
         })
     }
     
@@ -185,28 +186,46 @@ open class SNPNetwork: SNPNetworkProtocol {
     
     // MARK: Private functions
     private func request<E: SNPError>(url: URLConvertible,
-                                                 method: HTTPMethod = .get,
-                                                 parameters: Parameters? = nil,
-                                                 encoding: ParameterEncoding = URLEncoding.default,
-                                                 headers: HTTPHeaders? = nil,
-                                                 appendDefaultHeaders: Bool = true,
-                                                 responseKey: String = "",
-                                                 completion: @escaping (SNPDecodable?, E?) -> Void) {
+                                      method: HTTPMethod = .get,
+                                      parameters: Parameters? = nil,
+                                      encoding: ParameterEncoding = URLEncoding.default,
+                                      headers: HTTPHeaders? = nil,
+                                      appendDefaultHeaders: Bool = true,
+                                      responseKey: String = "",
+                                      completion: @escaping (SNPDecodable?, E?) -> Void) {
         
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
                              message: genericSNPError.message)
-        let header: HTTPHeaders? = appendHeaders(shouldAppend: appendDefaultHeaders, headers: headers)
+        let headers: HTTPHeaders? = appendHeaders(shouldAppend: appendDefaultHeaders, headers: headers)
         let alamofireRequest = Alamofire.request(url,
                                                  method: method,
                                                  parameters: parameters,
                                                  encoding: encoding,
-                                                 headers: header)
+                                                 headers: headers)
         
         alamofireRequest.responseData { response in
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
-                if statusCode.isAValidHTTPCode {
+                if statusCode == 401 {
+                    // we should start queueing the requests
+                    let toBeQueuedRequest = SNPNetworkRequest(url: url,
+                                                              method: method,
+                                                              parameters: parameters,
+                                                              encoding: encoding,
+                                                              headers: headers,
+                                                              responseKey: responseKey,
+                                                              completion: completion)
+                    self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+                    self.delegate?.refreshAccessToken { error in
+                        if error == nil {
+                            // successfully refreshed access token
+                            // adapt all requests
+                        } else {
+                            // nothing we can do, we must show login page to user
+                        }
+                    }
+                } else if statusCode.isAValidHTTPCode {
                     do {
                         let result = try JSONDecoder().decode(SNPDecodable.self, from: jsonData)
                         completion(result, nil)
@@ -228,6 +247,5 @@ open class SNPNetwork: SNPNetworkProtocol {
                 completion(nil, genericError)
             }
         }
-        
     }
 }
