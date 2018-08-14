@@ -10,11 +10,11 @@ import Foundation
 import SNPUtilities
 
 public struct SNPNetworkRequest<E: SNPError> {
-    var url: URLConvertible
-    var method: HTTPMethod
-    var parameters: Parameters?
-    var encoding: ParameterEncoding
-    var headers: HTTPHeaders?
-    var responseKey: String
-    var completion: (SNPDecodable?, E?) -> Void
+    public var url: URLConvertible
+    public var method: HTTPMethod
+    public var parameters: Parameters?
+    public var encoding: ParameterEncoding
+    public var headers: HTTPHeaders?
+    public var responseKey: String
+    public var completion: (SNPDecodable?, E?) -> Void
 }
