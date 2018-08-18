@@ -209,18 +209,17 @@ open class SNPNetwork: SNPNetworkProtocol {
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
                 if statusCode == 401 {
                     // we should start queueing the requests
-                    let toBeQueuedRequest = SNPNetworkRequest(url: url,
-                                                              method: method,
-                                                              parameters: parameters,
-                                                              encoding: encoding,
-                                                              headers: headers,
-                                                              responseKey: responseKey,
-                                                              completion: completion)
+                    let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
                     self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
                     self.delegate?.refreshAccessToken { error in
                         if error == nil {
                             // successfully refreshed access token
                             // adapt all requests
+                            self.queue = self.delegate!.adapt(requests: self.queue)
+                            for item in self.queue {
+                                self.request(url: item.url, method: item.method, parameters: item.parameters, encoding: item.encoding, headers: item.headers, appendDefaultHeaders: item.appendDefaultHeaders, responseKey: item.responseKey, completion: item.completion)
+                                _ = self.queue.remove(at: 0)
+                            }
                         } else {
                             // nothing we can do, we must show login page to user
                         }
