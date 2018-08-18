@@ -29,54 +29,7 @@ public enum DownloadResult {
 }
 public typealias Parameters = Alamofire.Parameters
 
-public protocol SNPNetworkProtocol {
-     func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                            method: HTTPMethod,
-                                            parameters: Parameters?,
-                                            encoding: ParameterEncoding,
-                                            headers: HTTPHeaders?,
-                                            appendDefaultHeaders: Bool,
-                                            responseKey: String,
-                                            completion: @escaping (T?, E?) -> Void)
-    func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                            method: HTTPMethod,
-                                            parameters: Parameters?,
-                                            encoding: ParameterEncoding,
-                                            headers: HTTPHeaders?,
-                                            appendDefaultHeaders: Bool,
-                                            responseKey: String,
-                                            completion: @escaping ([T]?, E?) -> Void)
-    func download(_ url: String,
-                  progress: ((_ progress: Double) -> Void)?,
-                  completion: @escaping (_ result: DownloadResult) -> Void)
-}
-public extension SNPNetworkProtocol {
-    func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                 method: HTTPMethod,
-                 parameters: Parameters?,
-                 encoding: ParameterEncoding,
-                 headers: HTTPHeaders?,
-                 appendDefaultHeaders: Bool,
-                 responseKey: String,
-                 completion: @escaping (T?, E?) -> Void) {
-        
-    }
-    func request<T: Decodable, E: SNPError>(url: URLConvertible,
-                                            method: HTTPMethod,
-                                            parameters: Parameters?,
-                                            encoding: ParameterEncoding,
-                                            headers: HTTPHeaders?,
-                                            appendDefaultHeaders: Bool,
-                                            responseKey: String,
-                                            completion: @escaping ([T]?, E?) -> Void){
-        
-    }
-    func download(_ url: String,
-                  progress: ((_ progress: Double) -> Void)?,
-                  completion: @escaping (_ result: DownloadResult) -> Void) {
-        
-    }
-}
+
 open class SNPNetwork: SNPNetworkProtocol {
     // MARK: Properties
     open static let shared = SNPNetwork()
@@ -120,7 +73,7 @@ open class SNPNetwork: SNPNetworkProtocol {
      
      - Returns: T, which T is Decodable, and E is kind of SNPError.
      */
-    open func request<T: Decodable, E: SNPError>(url: URLConvertible,
+    open func defaultRequest<T: Decodable, E: SNPError>(url: URLConvertible,
                                                  method: HTTPMethod = .get,
                                                  parameters: Parameters? = nil,
                                                  encoding: ParameterEncoding = URLEncoding.default,
@@ -139,7 +92,7 @@ open class SNPNetwork: SNPNetworkProtocol {
         })
     }
     
-    open func request<T: Decodable, E: SNPError>(url: URLConvertible,
+    open func defaultRequest<T: Decodable, E: SNPError>(url: URLConvertible,
                                                  method: HTTPMethod = .get,
                                                  parameters: Parameters? = nil,
                                                  encoding: ParameterEncoding = URLEncoding.default,
@@ -164,7 +117,7 @@ open class SNPNetwork: SNPNetworkProtocol {
      - Parameter progress: show progress of download.
      - Returns: N/A.
      */
-    open func download(_ url: String,
+    open func defaultDownload(_ url: String,
                        progress: ((_ progress: Double) -> Void)?,
                        completion: @escaping (_ result: DownloadResult) -> Void) {
         SNPUtilities.clearTempDirectory()

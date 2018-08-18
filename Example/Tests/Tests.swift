@@ -24,7 +24,7 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             var wasDownloadSuccessful = false
-            func download(_ url: String,
+            func defaultDownload(_ url: String,
                                          progress:((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ result: DownloadResult) -> Void) {
                 wasDownloadSuccessful = true
@@ -45,7 +45,7 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             var wasDownloadSuccessful = true
-            func download(_ url: String,
+            func defaultDownload(_ url: String,
                                          progress: ((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ result: DownloadResult) -> Void) {
                 wasDownloadSuccessful = false
@@ -66,7 +66,7 @@ class Tests: XCTestCase {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
             let fakeResult = MockModel(mockData: "mockData")
-            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
+            func defaultRequest<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(fakeResult as? T, nil)
             }
         }
@@ -93,7 +93,7 @@ class Tests: XCTestCase {
             static let shared = MockSNPNetwork()
             let fakeError = SNPError(domain: "FakeDomain", code: 987, message: "this is fake message")
             
-            func request<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
+            func defaultRequest<T, E>(url: URLConvertible, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?, appendDefaultHeaders: Bool, responseKey: String, completion: @escaping (T?, E?) -> Void) where T : Decodable, E : SNPError {
                 completion(nil, fakeError as? E)
             }
         }

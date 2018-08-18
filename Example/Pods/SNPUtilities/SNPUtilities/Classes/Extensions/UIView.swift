@@ -16,5 +16,4 @@ extension UIView {
         view.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         view.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
     }
-    
 }

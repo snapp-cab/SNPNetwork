@@ -38,9 +38,12 @@ extension Dictionary {
      */
     public func toModel<T: Decodable>(key: String?) -> T {
         let array = key?.components(separatedBy: ".")
-        let finalDic = getValue(forKeyPath: array!)
-        let result: T = finalDic.convertToModel()!
-        return result
+        let finalValue = getValue(forKeyPath: array!)
+        if let finalDic = finalValue as? [String: AnyObject] {
+            let result: T = finalDic.convertToModel()!
+            return result
+        }
+        return finalValue as! T
     }
     
     /**
@@ -68,7 +71,7 @@ extension Dictionary where Key: Any, Value: Any {
      
      - Returns: A dictionary.
      */
-    public func getValue(forKeyPath components: [Any]) -> [String: AnyObject] {
+    public func getValue(forKeyPath components: [Any]) -> Any {
         var comps = components
         let key = comps.remove(at: 0)
         if let aKey = key as? Key {
@@ -76,7 +79,7 @@ extension Dictionary where Key: Any, Value: Any {
                 return self as! [String: AnyObject]
             }
             if comps.count == 0 {
-                return self[aKey] as! [String: AnyObject]
+                return self[aKey]
             }
             if let value = self[aKey] as? [String: AnyObject] {
                 return value.getValue(forKeyPath: comps)

@@ -4,7 +4,7 @@ platform :ios, '9.0'
 def standard_pods
     pod 'SNPNetwork', :path => '../'
     pod 'Alamofire', '~> 4.7'
-    pod 'SNPUtilities'
+    pod 'SNPUtilities', git: 'https://github.com/snapp-cab/SNPUtilities.git', branch: 'dev'
 end
 
 target 'SNPNetwork_Example' do

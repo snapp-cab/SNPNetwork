@@ -23,15 +23,15 @@ public struct SNPDecodable: Decodable {
     
     public init(from decoder: Decoder) throws {
         if let container = try? decoder.container(keyedBy: CodingKeys.self) {
-            var result = [String: Any]()
+            var result = [String: Any?]()
             try container.allKeys.forEach { (key) throws in
-                result[key.stringValue] = try container.decode(SNPDecodable.self, forKey: key).value
+                result[key.stringValue] = try? container.decode(SNPDecodable.self, forKey: key).value
             }
             value = result
         } else if var container = try? decoder.unkeyedContainer() {
-            var result = [Any]()
+            var result = [Any?]()
             while !container.isAtEnd {
-                result.append(try container.decode(SNPDecodable.self).value)
+                result.append(try? container.decode(SNPDecodable.self).value)
             }
             value = result
         } else if let container = try? decoder.singleValueContainer() {
