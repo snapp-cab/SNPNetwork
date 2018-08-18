@@ -204,7 +204,11 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  parameters: parameters,
                                                  encoding: encoding,
                                                  headers: headers)
-        
+        if mustQueue == true {
+            let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
+            self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+            return
+        }
         alamofireRequest.responseData { response in
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
                 if statusCode == 401 {
@@ -220,10 +224,12 @@ open class SNPNetwork: SNPNetworkProtocol {
                                 self.request(url: item.url, method: item.method, parameters: item.parameters, encoding: item.encoding, headers: item.headers, appendDefaultHeaders: item.appendDefaultHeaders, responseKey: item.responseKey, completion: item.completion)
                                 _ = self.queue.remove(at: 0)
                             }
+                            self.mustQueue = false
                         } else {
                             // nothing we can do, we must show login page to user
                         }
                     }
+                    self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
                     do {
                         let result = try JSONDecoder().decode(SNPDecodable.self, from: jsonData)
