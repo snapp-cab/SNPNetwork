@@ -193,7 +193,11 @@ open class SNPNetwork: SNPNetworkProtocol {
                                       appendDefaultHeaders: Bool = true,
                                       responseKey: String = "",
                                       completion: @escaping (SNPDecodable?, E?) -> Void) {
-        
+        if mustQueue == true {
+            let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
+            self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+            return
+        }
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
@@ -204,11 +208,6 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  parameters: parameters,
                                                  encoding: encoding,
                                                  headers: headers)
-        if mustQueue == true {
-            let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
-            self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
-            return
-        }
         alamofireRequest.responseData { response in
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
                 if statusCode == 401 {
