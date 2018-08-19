@@ -34,6 +34,9 @@ open class SNPNetwork: SNPNetworkProtocol {
     // MARK: Properties
     open static let shared = SNPNetwork()
     private var defaultHeaders: HTTPHeaders?
+    private var queue = [SNPNetworkRequest]()
+    private var mustQueue = false
+    open var delegate: SNPAuthenticationDelegate?
     /**
      sets default headers for all requests.
      
@@ -145,7 +148,11 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  appendDefaultHeaders: Bool = true,
                                                  responseKey: String = "",
                                                  completion: @escaping (SNPDecodable?, E?) -> Void) {
-        
+        if mustQueue == true {
+            let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
+            self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+            return
+        }
         let genericSNPError = SNPError.generic()
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
@@ -159,7 +166,28 @@ open class SNPNetwork: SNPNetworkProtocol {
         
         alamofireRequest.responseData { response in
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
-                if statusCode.isAValidHTTPCode {
+                if statusCode == 401 {
+                    // we should start queueing the requests
+                    let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
+                    self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+                    self.delegate?.refreshAccessToken { error in
+                        if error == nil {
+                            // successfully refreshed access token
+                            // adapt all requests
+                            self.queue = self.delegate!.adapt(requests: self.queue)
+                            // turn `mustQueue` flag off, because we have new valid access token and no longer need to enqueue requests.
+                            self.mustQueue = false
+                            // now dequeue each request and make it call again.
+                            for item in self.queue {
+                                self.request(url: item.url, method: item.method, parameters: item.parameters, encoding: item.encoding, headers: item.headers, appendDefaultHeaders: item.appendDefaultHeaders, responseKey: item.responseKey, completion: item.completion)
+                                _ = self.queue.remove(at: 0)
+                            }
+                        } else {
+                            // nothing we can do, we must show login page to user
+                        }
+                    }
+                    self.mustQueue = true
+                } else if statusCode.isAValidHTTPCode {
                     do {
                         let result = try JSONDecoder().decode(SNPDecodable.self, from: jsonData)
                         completion(result, nil)
