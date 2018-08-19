@@ -17,5 +17,5 @@ public struct SNPNetworkRequest<E: SNPError> {
     public var headers: HTTPHeaders?
     public var appendDefaultHeaders: Bool
     public var responseKey: String
-    public var completion: (SNPDecodable?, E?) -> Void
+    public var completion: (Data?, E?) -> Void
 }

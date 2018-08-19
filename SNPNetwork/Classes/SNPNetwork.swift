@@ -84,14 +84,15 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  appendDefaultHeaders: Bool = true,
                                                  responseKey: String = "",
                                                  completion: @escaping (T?, E?) -> Void) {
-        request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (result , error: E?) ->  Void in
-            guard let dictRes = result?.value as? [String: Any], let result: T = dictRes.toModel(key: responseKey) else {
-                completion(nil, error)
-                return
-            }
-            completion(result, error)
-            
-            
+        request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (data , error: E?) ->  Void in
+            do {
+                let decodable = try SNPDecoder(type: T.self, data: data!, codingPath: responseKey).decode()
+                completion(decodable, nil)
+            } catch {
+                let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
+                                     code: -10,
+                                     message: error.localizedDescription)
+                completion(nil, genericError) }
         })
     }
     
@@ -103,12 +104,15 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  appendDefaultHeaders: Bool = true,
                                                  responseKey: String = "",
                                                  completion: @escaping ([T]?, E?) -> Void) {
-        request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (result , error: E?) ->  Void in
-            guard let result = result, let arrayRes = result.value as? [Any] else {
-                completion(nil, error)
-                return
-            }
-            completion(arrayRes.toModel(key: nil),error)
+        request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (data , error: E?) ->  Void in
+            do {
+                let decodable = try SNPDecoder(type: T.self, data: data!, codingPath: responseKey).decodeArray()
+                completion(decodable, nil)
+            } catch {
+                let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
+                                     code: -10,
+                                     message: error.localizedDescription)
+                completion(nil, genericError) }
             
         })
     }
@@ -147,7 +151,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  headers: HTTPHeaders? = nil,
                                                  appendDefaultHeaders: Bool = true,
                                                  responseKey: String = "",
-                                                 completion: @escaping (SNPDecodable?, E?) -> Void) {
+                                                 completion: @escaping (Data?, E?) -> Void) {
         if mustQueue == true {
             let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
             self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
@@ -189,8 +193,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                     self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
                     do {
-                        let result = try JSONDecoder().decode(SNPDecodable.self, from: jsonData)
-                        completion(result, nil)
+                        completion(jsonData, nil)
                     } catch {
                         // error parsing response to T
                         completion(nil, genericError)

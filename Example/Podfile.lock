@@ -23,7 +23,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SNPUtilities:
-    :commit: a2123ef1a9d70e9228817c102d4b7bb6ad78bb90
+    :commit: 44595f228687727bd1747448ea499bbc0169a4d2
     :git: https://github.com/snapp-cab/SNPUtilities.git
 
 SPEC CHECKSUMS:

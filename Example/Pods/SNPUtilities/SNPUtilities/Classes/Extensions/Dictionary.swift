@@ -79,7 +79,7 @@ extension Dictionary where Key: Any, Value: Any {
                 return self as! [String: AnyObject]
             }
             if comps.count == 0 {
-                return self[aKey]
+                return self[aKey] as Any
             }
             if let value = self[aKey] as? [String: AnyObject] {
                 return value.getValue(forKeyPath: comps)

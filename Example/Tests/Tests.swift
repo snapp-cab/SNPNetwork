@@ -23,7 +23,7 @@ class Tests: XCTestCase {
     func makeRequest() -> SNPNetworkRequest<SNPError> {
         let params = ["key1": "value1", "key2": 10] as [String : Any]
         let headers = ["key1": "value1", "key2": "value2"]
-        let completion: ((SNPDecodable?, SNPError?) -> Void) = { _,_ in }
+        let completion: ((Data?, SNPError?) -> Void) = { _,_ in }
         return SNPNetworkRequest<SNPError>(url: "http://fakeurl.com", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers, appendDefaultHeaders: false, responseKey: "", completion: completion)
     }
     
@@ -83,7 +83,7 @@ class Tests: XCTestCase {
                                   headers: HTTPHeaders? = nil,
                                   appendDefaultHeaders: Bool = true,
                                   responseKey: String = "",
-                                  completion: @escaping (SNPDecodable?, E?) -> Void) {
+                                  completion: @escaping (Data?, E?) -> Void) {
             if mustQueue == true {
                 let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
                 self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
@@ -250,7 +250,7 @@ class Tests: XCTestCase {
                                       completion: @escaping (SNPDecodable?, E?) -> Void) {
                 let params = ["key1": "value1", "key2": 10] as [String : Any]
                 let headers = ["key1": "value1", "key2": "value2"]
-                let completion: ((SNPDecodable?, SNPError?) -> Void) = { _,_ in }
+                let completion: ((Data?, SNPError?) -> Void) = { _,_ in }
                 let request = SNPNetworkRequest<SNPError>(url: "http://fakeurl.com", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers, appendDefaultHeaders: false, responseKey: "", completion: completion)
                 queue.append(request)
                 queue.append(request)
