@@ -219,11 +219,13 @@ open class SNPNetwork: SNPNetworkProtocol {
                             // successfully refreshed access token
                             // adapt all requests
                             self.queue = self.delegate!.adapt(requests: self.queue)
+                            // turn `mustQueue` flag off, because we have new valid access token and no longer need to enqueue requests.
+                            self.mustQueue = false
+                            // now dequeue each request and make it call again.
                             for item in self.queue {
                                 self.request(url: item.url, method: item.method, parameters: item.parameters, encoding: item.encoding, headers: item.headers, appendDefaultHeaders: item.appendDefaultHeaders, responseKey: item.responseKey, completion: item.completion)
                                 _ = self.queue.remove(at: 0)
                             }
-                            self.mustQueue = false
                         } else {
                             // nothing we can do, we must show login page to user
                         }
