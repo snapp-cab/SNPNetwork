@@ -85,14 +85,18 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  responseKey: String = "",
                                                  completion: @escaping (T?, E?) -> Void) {
         request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (data , error: E?) ->  Void in
+            let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
+                                 code: -10,
+                                 message: "")
             do {
-                let decodable = try SNPDecoder(type: T.self, data: data!, codingPath: responseKey).decode()
+                guard let data = data else {
+                    completion(nil, E(domain: genericError.domain, code: genericError.code, message: "data returned from network is nil"))
+                    return
+                }
+                let decodable = try SNPDecoder(type: T.self, data: data, codingPath: responseKey).decode()
                 completion(decodable, nil)
             } catch {
-                let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
-                                     code: -10,
-                                     message: error.localizedDescription)
-                completion(nil, genericError) }
+                completion(nil, E(domain: genericError.domain, code: genericError.code, message: error.localizedDescription)) }
         })
     }
     
@@ -105,14 +109,18 @@ open class SNPNetwork: SNPNetworkProtocol {
                                                  responseKey: String = "",
                                                  completion: @escaping ([T]?, E?) -> Void) {
         request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: { (data , error: E?) ->  Void in
+            let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
+                                 code: -10,
+                                 message: "")
             do {
-                let decodable = try SNPDecoder(type: T.self, data: data!, codingPath: responseKey).decodeArray()
+                guard let data = data else {
+                    completion(nil, E(domain: genericError.domain, code: genericError.code, message: "data returned from network is nil"))
+                    return
+                }
+                let decodable = try SNPDecoder(type: T.self, data: data, codingPath: responseKey).decodeArray()
                 completion(decodable, nil)
             } catch {
-                let genericError = E(domain: (try? url.asURL().absoluteString) ?? "",
-                                     code: -10,
-                                     message: error.localizedDescription)
-                completion(nil, genericError) }
+                completion(nil, E(domain: genericError.domain, code: genericError.code, message: error.localizedDescription)) }
             
         })
     }
