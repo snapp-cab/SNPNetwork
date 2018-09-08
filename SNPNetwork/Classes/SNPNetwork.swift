@@ -90,7 +90,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                                  message: "")
             do {
                 guard let data = data else {
-                    completion(nil, E(domain: genericError.domain, code: genericError.code, message: "data returned from network is nil"))
+                    completion(nil, error)
                     return
                 }
                 let decodable = try SNPDecoder(type: T.self, data: data, codingPath: responseKey).decode()
@@ -114,7 +114,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                                  message: "")
             do {
                 guard let data = data else {
-                    completion(nil, E(domain: genericError.domain, code: genericError.code, message: "data returned from network is nil"))
+                    completion(nil, error)
                     return
                 }
                 let decodable = try SNPDecoder(type: T.self, data: data, codingPath: responseKey).decodeArray()
@@ -200,15 +200,10 @@ open class SNPNetwork: SNPNetworkProtocol {
                     }
                     self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
-                    do {
-                        completion(jsonData, nil)
-                    } catch {
-                        // error parsing response to T
-                        completion(nil, genericError)
-                    }
+                    completion(jsonData, nil)
                 } else {
                     do {
-                        let error = try JSONDecoder().decode(E.self, from: jsonData)
+                        let error = try SNPDecoder(type: E.self, data: jsonData, codingPath: nil).decode()
                         completion(nil, error)
                     } catch {
                         // error parsing response to E
