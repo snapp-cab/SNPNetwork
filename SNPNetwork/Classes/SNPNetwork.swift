@@ -182,6 +182,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                     // we should start queueing the requests
                     let toBeQueuedRequest = SNPNetworkRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
                     self.queue.append(toBeQueuedRequest as! SNPNetworkRequest<SNPError>)
+                    self.mustQueue = true
                     self.delegate?.refreshAccessToken { error in
                         if error == nil {
                             // successfully refreshed access token
@@ -200,7 +201,6 @@ open class SNPNetwork: SNPNetworkProtocol {
                             self.mustQueue = false
                         }
                     }
-                    self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
                     completion(jsonData, nil)
                 } else {
