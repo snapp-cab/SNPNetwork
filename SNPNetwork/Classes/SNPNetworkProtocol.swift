@@ -50,7 +50,7 @@ public extension SNPNetworkProtocol {
                                                  appendDefaultHeaders: Bool = true,
                                                  responseKey: String = "",
                                                  completion: @escaping ([T]?, E?) -> Void) {
-        request(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
+        defaultRequest(url: url, method: method, parameters: parameters, encoding: encoding, headers: headers, appendDefaultHeaders: appendDefaultHeaders, responseKey: responseKey, completion: completion)
     }
     
     /**
