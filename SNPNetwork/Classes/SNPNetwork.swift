@@ -195,7 +195,9 @@ open class SNPNetwork: SNPNetworkProtocol {
                                 _ = self.queue.remove(at: 0)
                             }
                         } else {
-                            // nothing we can do, we must show login page to user
+                            self.queue.map({$0.completion}).forEach { $0(nil, SNPError.generic()) }
+                            self.queue = []
+                            self.mustQueue = false
                         }
                     }
                     self.mustQueue = true
