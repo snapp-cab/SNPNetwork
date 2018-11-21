@@ -173,7 +173,7 @@ open class SNPNetwork: SNPNetworkProtocol {
         
         Alamofire.download(url, to: destination)
             .downloadProgress( closure: { prog in
-                progress!(prog.fractionCompleted)
+                progress?(prog.fractionCompleted)
             })
             .response(completionHandler: { defaultDownloadResponse in
                 if let error = defaultDownloadResponse.error {
