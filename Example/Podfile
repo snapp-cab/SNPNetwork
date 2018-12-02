@@ -1,17 +1,17 @@
 use_frameworks!
 platform :ios, '9.0'
 
-def standard_pods
+def shared_pods
     pod 'SNPNetwork', :path => '../'
-    pod 'Alamofire', '~> 4.7'
-    pod 'SNPUtilities', git: 'https://github.com/snapp-cab/SNPUtilities.git', branch: 'dev'
+    pod 'Alamofire'
+    pod 'SNPUtilities', :git => 'https://github.com/snapp-cab/SNPUtilities.git', :branch => 'dev'
 end
 
 target 'SNPNetwork_Example' do
-    standard_pods
+    shared_pods
 end
 
 target 'SNPNetwork_Tests' do
     inherit! :search_paths
-    standard_pods
+    shared_pods
 end
