@@ -101,7 +101,7 @@ public extension String {
     
     public func makeCall() {
         if isValid(regex: .phone) {
-            if let url = URL(string: "telprompt://\(self.onlyDigits())"), UIApplication.shared.canOpenURL(url) {
+            if let url = URL(string: "telprompt://\(self)"), UIApplication.shared.canOpenURL(url) {
                 if #available(iOS 10, *) {
                     UIApplication.shared.open(url)
                 } else {
@@ -110,4 +110,34 @@ public extension String {
             }
         }
     }
+    
+    public func makeUssdCall() {
+        let url = URL(string: "telprompt://\(self)")
+        if #available(iOS 10, *) {
+            UIApplication.shared.open(url!)
+        } else {
+            UIApplication.shared.openURL(url!)
+        }
+    }
+    
+    public func isValidEmail() -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: self)
+    }
+    
+    public func validatePhoneNumber() -> Bool {
+        let regex = "09[0-9]{9}"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        
+        return predicate.evaluate(with: self.convertedDigitsToEnglish())
+    }
+    //    public func englishFormat() -> String? {
+    //        let Formatter = NumberFormatter()
+    //        Formatter.locale = NSLocale(localeIdentifier: "EN") as Locale!
+    //        if let final = Formatter.number(from: self) as? String {
+    //            return final
+    //        }
+    //        return nil
+    //    }
 }

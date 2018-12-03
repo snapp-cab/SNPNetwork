@@ -15,10 +15,9 @@ class SNPKeybordHeightConstraint: NSLayoutConstraint {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        print(123)
-        NotificationCenter.default.addObserver(self, selector: #selector(keybordFrameChanged), name: .UIKeyboardDidChangeFrame, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keybordHide), name: .UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keybordShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keybordFrameChanged), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keybordHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keybordShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     //MARK: HandleKeyBord
@@ -33,7 +32,7 @@ class SNPKeybordHeightConstraint: NSLayoutConstraint {
     }
     @objc func keybordHide(notification: Notification) {
         isKeybordHide = true
-        let time = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? CFTimeInterval) ?? 3.0
+        let time = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? CFTimeInterval) ?? 3.0
         CATransaction.begin()
         CATransaction.setAnimationDuration(time)
         self.constant = self.margin
@@ -42,7 +41,7 @@ class SNPKeybordHeightConstraint: NSLayoutConstraint {
     }
     func setKeybordHeigth(notification: Notification){
         if !isKeybordHide {
-            guard let userInfo = notification.userInfo, let frame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect else{
+            guard let userInfo = notification.userInfo, let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else{
                 return
             }
             guard let view = UIApplication.shared.keyWindow?.rootViewController?.view else {
@@ -64,7 +63,7 @@ class SNPKeybordHeightConstraint: NSLayoutConstraint {
                 }
             }
             
-            let time = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? CFTimeInterval) ?? 3.0
+            let time = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? CFTimeInterval) ?? 3.0
             CATransaction.begin()
             CATransaction.setAnimationDuration(time)
             self.constant = height + self.margin

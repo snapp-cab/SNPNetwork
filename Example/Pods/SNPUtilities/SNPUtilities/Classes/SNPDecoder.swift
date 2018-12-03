@@ -18,7 +18,7 @@ public class SNPDecoder <T: Decodable> {
     private let path: String?
     private let decoder: DecoderContainer
     public init(type: T.Type,data: Data,codingPath: String?) throws {
-        decoder = try! JSONDecoder().decode(DecoderContainer.self, from: data)
+        decoder = try JSONDecoder().decode(DecoderContainer.self, from: data)
         self.path = codingPath
         
     }

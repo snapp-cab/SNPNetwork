@@ -201,13 +201,6 @@ open class SNPNetwork: SNPNetworkProtocol {
                     }
                     self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
-                    do {
-                        completion(jsonData, nil)
-                    } catch {
-                        // error parsing response to T
-                        completion(nil, genericError)
-                    }
-                } else if statusCode.isAValidHTTPCode {
                     completion(jsonData, nil)
                 } else {
                     do {
@@ -219,8 +212,16 @@ open class SNPNetwork: SNPNetworkProtocol {
                     }
                 }
             } else {
-                // unknown network error
-                completion(nil, genericError)
+                switch response.result {
+                case .failure(let error):
+                    // Do whatever here
+                    let genericError = E(domain: genericSNPError.domain, code: error._code, message: error.localizedDescription)
+                    completion(nil, genericError)
+                    return
+                default:
+                    completion(nil, genericError)
+                    print("Unknown network error")
+                }
             }
         }
     }

@@ -270,7 +270,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SNPNetwork_Tests/Pods-SNPNetwork_Tests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-SNPNetwork_Tests/Pods-SNPNetwork_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/SNPNetwork/SNPNetwork.framework",
 				"${BUILT_PRODUCTS_DIR}/SNPUtilities/SNPUtilities.framework",
@@ -283,7 +283,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SNPNetwork_Tests/Pods-SNPNetwork_Tests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SNPNetwork_Tests/Pods-SNPNetwork_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		23E6AA1F9812EEA263A636BC /* [CP] Check Pods Manifest.lock */ = {
@@ -328,7 +328,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SNPNetwork_Example/Pods-SNPNetwork_Example-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-SNPNetwork_Example/Pods-SNPNetwork_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/SNPNetwork/SNPNetwork.framework",
 				"${BUILT_PRODUCTS_DIR}/SNPUtilities/SNPUtilities.framework",
@@ -341,7 +341,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SNPNetwork_Example/Pods-SNPNetwork_Example-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SNPNetwork_Example/Pods-SNPNetwork_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
