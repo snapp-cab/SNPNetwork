@@ -29,7 +29,6 @@ public enum DownloadResult {
 }
 public typealias Parameters = Alamofire.Parameters
 
-
 open class SNPNetwork: SNPNetworkProtocol {
     // MARK: Properties
     open static let shared = SNPNetwork()
@@ -65,7 +64,7 @@ open class SNPNetwork: SNPNetworkProtocol {
     }
     
     /**
-     To make reqeut to url.
+     To make request to url.
      
      - Parameter url: url of interest to retrieve data. It should be String
      - Parameter method: is the type of request you look for.
@@ -140,7 +139,7 @@ open class SNPNetwork: SNPNetworkProtocol {
         
         Alamofire.download(url, to: destination)
             .downloadProgress( closure: { prog in
-                progress!(prog.fractionCompleted)
+                progress?(prog.fractionCompleted)
             })
             .response(completionHandler: { defaultDownloadResponse in
                 if let error = defaultDownloadResponse.error {
@@ -169,13 +168,12 @@ open class SNPNetwork: SNPNetworkProtocol {
         let genericError = E(domain: genericSNPError.domain,
                              code: genericSNPError.code,
                              message: genericSNPError.message)
-        let header: HTTPHeaders? = appendHeaders(shouldAppend: appendDefaultHeaders, headers: headers)
+        let headers: HTTPHeaders? = appendHeaders(shouldAppend: appendDefaultHeaders, headers: headers)
         let alamofireRequest = Alamofire.request(url,
                                                  method: method,
                                                  parameters: parameters,
                                                  encoding: encoding,
-                                                 headers: header)
-        
+                                                 headers: headers)
         alamofireRequest.responseData { response in
             if let statusCode = response.response?.statusCode, let jsonData = response.value {
                 if statusCode == 401 {
@@ -201,6 +199,7 @@ open class SNPNetwork: SNPNetworkProtocol {
                             self.mustQueue = false
                         }
                     }
+                    self.mustQueue = true
                 } else if statusCode.isAValidHTTPCode {
                     completion(jsonData, nil)
                 } else {
@@ -225,6 +224,5 @@ open class SNPNetwork: SNPNetworkProtocol {
                 }
             }
         }
-        
     }
 }

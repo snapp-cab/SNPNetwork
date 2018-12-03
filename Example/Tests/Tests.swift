@@ -126,6 +126,15 @@ class Tests: XCTestCase {
             func defaultDownload(_ url: String,
                                          progress:((_ progress: Double) -> Void)?,
                                          completion: @escaping (_ result: DownloadResult) -> Void) {
+
+                wasDownloadSuccessful = true
+                let resultString = "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
+                completion(.success(resultString))
+            
+                                         }
+            func download(_ url: String,
+                          progress:((_ progress: Double) -> Void)?,
+                          completion: @escaping (_ result: DownloadResult) -> Void) {
                 wasDownloadSuccessful = true
                 let resultString = "Downloading file was successful and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
                 completion(.success(resultString))
@@ -151,6 +160,13 @@ class Tests: XCTestCase {
                 let resultString = "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
                 completion(.failure(resultString))
             }
+            func download(_ url: String,
+                          progress: ((_ progress: Double) -> Void)?,
+                          completion: @escaping (_ result: DownloadResult) -> Void) {
+                wasDownloadSuccessful = false
+                let resultString = "Downloading file was failed and \'wasDownloadSuccessful\' flag is \(wasDownloadSuccessful)"
+                completion(.failure(resultString))
+            }
         }
         
         MockSNPNetwork.shared.download(mockURL, progress: nil, completion: { (result) in
@@ -171,19 +187,19 @@ class Tests: XCTestCase {
         }
         
         MockSNPNetwork.shared.request(url: mockURL,
-                               method: .get,
-                               parameters: nil,
-                               encoding: URLEncoding.default,
-                               headers: nil, appendDefaultHeaders: false,
-                               responseKey: "") { (model: MockModel?, error: SNPError?) in
-                                guard let aModel = model else {
-                                    XCTFail("Model should not be nil")
-                                    print(error!)
-                                    return
-                                }
-                                XCTAssertNotNil(aModel)
-                                self.expectedString = "mockData"
-                                XCTAssertEqual(self.expectedString, aModel.mockData!)
+                                      method: .get,
+                                      parameters: nil,
+                                      encoding: URLEncoding.default,
+                                      headers: nil, appendDefaultHeaders: false,
+                                      responseKey: "") { (model: MockModel?, error: SNPError?) in
+                                        guard let aModel = model else {
+                                            XCTFail("Model should not be nil")
+                                            print(error!)
+                                            return
+                                        }
+                                        XCTAssertNotNil(aModel)
+                                        self.expectedString = "mockData"
+                                        XCTAssertEqual(self.expectedString, aModel.mockData!)
         }
     }
     
@@ -198,20 +214,20 @@ class Tests: XCTestCase {
         }
         
         MockSNPNetwork.shared.request(url: mockURL,
-                               method: .get,
-                               parameters: nil,
-                               encoding: URLEncoding.default,
-                               headers: nil, appendDefaultHeaders: false,
-                               responseKey: "") { (model: MockModel?, error: SNPError?) in
-                                guard let anError = error else {
-                                    XCTFail("Error should not be nil")
-                                    print(model!)
-                                    return
-                                }
-                                XCTAssertNotNil(anError)
-                                self.expectedString = "this is fake message"
-                                XCTAssertEqual(self.expectedString, anError.message)
-                                
+                                      method: .get,
+                                      parameters: nil,
+                                      encoding: URLEncoding.default,
+                                      headers: nil, appendDefaultHeaders: false,
+                                      responseKey: "") { (model: MockModel?, error: SNPError?) in
+                                        guard let anError = error else {
+                                            XCTFail("Error should not be nil")
+                                            print(model!)
+                                            return
+                                        }
+                                        XCTAssertNotNil(anError)
+                                        self.expectedString = "this is fake message"
+                                        XCTAssertEqual(self.expectedString, anError.message)
+                                        
         }
     }
     
@@ -232,7 +248,6 @@ class Tests: XCTestCase {
         
         XCTAssertEqual(MockSNPNetwork.shared.queue.count, 4)
     }
-    
     func testDequeueRequestsWhenNewAccessTokenFetched() {
         class MockSNPNetwork: SNPNetworkProtocol {
             static let shared = MockSNPNetwork()
@@ -247,7 +262,7 @@ class Tests: XCTestCase {
                                       headers: HTTPHeaders? = nil,
                                       appendDefaultHeaders: Bool = true,
                                       responseKey: String = "",
-                                      completion: @escaping (SNPDecodable?, E?) -> Void) {
+                                      completion: @escaping (Data?, E?) -> Void) {
                 let params = ["key1": "value1", "key2": 10] as [String : Any]
                 let headers = ["key1": "value1", "key2": "value2"]
                 let completion: ((Data?, SNPError?) -> Void) = { _,_ in }
@@ -350,4 +365,5 @@ class Tests: XCTestCase {
         XCTAssertFalse(MockSNPNetwork.shared.mustQueue)
         XCTAssertEqual(MockSNPNetwork.shared.queue.count, 0)
     }
+  
 }

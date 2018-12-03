@@ -8,8 +8,8 @@
 
 import UIKit
 
-extension UIImage {
-    public convenience init?(localized: String, languageCode: String = Locale.current.languageCode!) {
-        self.init(named: "\(languageCode)/\(localized)")
-    }
-}
+//extension UIImage {
+//    public convenience init?(localized: String, languageCode: String = Locale.current.languageCode!) {
+//        self.init(named: "\(languageCode)/\(localized)")
+//    }
+//}
