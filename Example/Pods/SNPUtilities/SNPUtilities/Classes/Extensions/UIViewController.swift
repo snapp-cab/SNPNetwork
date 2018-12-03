@@ -9,8 +9,8 @@ import UIKit
 
 extension UIViewController {
     @objc open func embed(childViewController: UIViewController, in containerView: UIView) {
-        addChildViewController(childViewController)
-        childViewController.didMove(toParentViewController: self)
+        addChild(childViewController)
+        childViewController.didMove(toParent: self)
         containerView.addExpletiveSubView(view: childViewController.view)
     }
 }

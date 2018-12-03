@@ -25,4 +25,34 @@ extension Int {
         
     }
     
+    public func convertToEquivalenceMonthName() -> String {
+        switch self {
+        case 0:
+            return NSLocalizedString("January", comment: "")
+        case 1:
+            return NSLocalizedString("February", comment: "")
+        case 2:
+            return NSLocalizedString("March", comment: "")
+        case 3:
+            return NSLocalizedString("April", comment: "")
+        case 4:
+            return NSLocalizedString("May", comment: "")
+        case 5:
+            return NSLocalizedString("June", comment: "")
+        case 6:
+            return NSLocalizedString("July", comment: "")
+        case 7:
+            return NSLocalizedString("August", comment: "")
+        case 8:
+            return NSLocalizedString("September", comment: "")
+        case 9:
+            return NSLocalizedString("October", comment: "")
+        case 10:
+            return NSLocalizedString("November", comment: "")
+        case 11:
+            return NSLocalizedString("December", comment: "")
+        default:
+            return "\(self)"
+        }
+    }
 }
